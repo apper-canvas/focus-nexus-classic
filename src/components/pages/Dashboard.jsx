@@ -60,36 +60,28 @@ const activeDeals = deals.filter(d => d.stage_c !== "Closed");
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <MetricCard
+<MetricCard
           icon="Users"
           label="Total Contacts"
           value={contacts.length}
-          trend="+12%"
-          trendUp={true}
           index={0}
         />
         <MetricCard
           icon="TrendingUp"
           label="Active Deals"
           value={activeDeals.length}
-          trend="+5"
-          trendUp={true}
           index={1}
         />
         <MetricCard
           icon="DollarSign"
           label="Pipeline Value"
           value={`$${(totalPipelineValue / 1000).toFixed(0)}K`}
-          trend="+18%"
-          trendUp={true}
           index={2}
         />
         <MetricCard
           icon="Target"
           label="Conversion Rate"
           value={`${conversionRate}%`}
-          trend="+2.3%"
-          trendUp={true}
           index={3}
         />
       </div>
