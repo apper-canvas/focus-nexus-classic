@@ -116,7 +116,7 @@ const activeDeals = deals.filter(d => d.stage_c !== "Closed");
                     </div>
                   </div>
                   <div className="flex gap-1">
-                    {contact.tags.slice(0, 2).map((tag) => (
+{(contact.tags || []).slice(0, 2).map((tag) => (
                       <Badge key={tag} variant="default">
                         {tag}
                       </Badge>
