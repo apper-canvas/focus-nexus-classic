@@ -9,6 +9,7 @@ const Header = ({ onCreateContact, onCreateDeal }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
+  const authContext = useContext(AuthContext);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -47,8 +48,7 @@ const Header = ({ onCreateContact, onCreateDeal }) => {
               New Deal
             </Button>
           )}
-          <Button variant="secondary" onClick={() => {
-            const authContext = useContext(AuthContext);
+<Button variant="secondary" onClick={() => {
             if (authContext?.logout) {
               authContext.logout();
             }
