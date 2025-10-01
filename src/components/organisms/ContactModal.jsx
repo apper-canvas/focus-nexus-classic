@@ -6,8 +6,8 @@ import Button from "@/components/atoms/Button";
 import FormField from "@/components/molecules/FormField";
 
 const ContactModal = ({ isOpen, onClose, contact, onSave }) => {
-  const [formData, setFormData] = useState({
-    name: "",
+const [formData, setFormData] = useState({
+    name_c: "",
     email: "",
     phone: "",
     company: "",
@@ -20,7 +20,7 @@ const ContactModal = ({ isOpen, onClose, contact, onSave }) => {
   useEffect(() => {
 if (contact) {
       setFormData({
-        name: contact.name_c || contact.Name || "",
+name_c: contact.name_c || contact.Name || "",
         email: contact.email_c || "",
         phone: contact.phone_c || "",
         company: contact.company_c || "",
@@ -29,7 +29,7 @@ if (contact) {
       });
     } else {
       setFormData({
-        name: "",
+name_c: "",
         email: "",
         phone: "",
         company: "",
@@ -50,7 +50,7 @@ if (contact) {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = "Name is required";
+if (!formData.name_c.trim()) newErrors.name_c = "Name is required";
     if (!formData.email.trim()) newErrors.email = "Email is required";
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Invalid email format";
@@ -114,8 +114,8 @@ if (contact) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <FormField
                   label="Name"
-                  name="name"
-                  value={formData.name}
+name="name_c"
+                  value={formData.name_c}
                   onChange={handleChange}
                   error={errors.name}
                   required

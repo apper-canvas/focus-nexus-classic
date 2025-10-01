@@ -51,13 +51,13 @@ const Contacts = ({ onCreateContact, createContactTrigger }) => {
 
   const handleSave = async (contactData) => {
     try {
-      if (selectedContact) {
+if (selectedContact) {
 await contactService.update(selectedContact.Id, contactData);
         await activityService.create({
           type: "contact_updated",
           entityType: "contact",
           entityId: selectedContact.Id,
-          description: `Contact ${contactData.name || "Unknown"} updated`
+          description: `Contact ${contactData.name_c || "Unknown"} updated`
         });
         toast.success("Contact updated successfully");
 } else {
@@ -66,7 +66,7 @@ await contactService.update(selectedContact.Id, contactData);
           type: "contact_created",
           entityType: "contact",
           entityId: newContact.Id,
-          description: `Contact ${contactData.name} created`
+          description: `Contact ${contactData.name_c || "Unknown"} created`
         });
         toast.success("Contact created successfully");
       }
