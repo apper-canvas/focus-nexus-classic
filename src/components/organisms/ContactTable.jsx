@@ -97,8 +97,8 @@ const ContactTable = ({ contacts, onEdit, onDelete }) => {
                         {tag}
                       </Badge>
                     ))}
-                    {contact.tags.length > 2 && (
-                      <Badge variant="default">+{contact.tags.length - 2}</Badge>
+                    {(contact.tags_c?.split(",").length || 0) > 2 && (
+                      <Badge variant="default">+{(contact.tags_c?.split(",").length || 0) - 2}</Badge>
                     )}
                   </div>
                 </td>
