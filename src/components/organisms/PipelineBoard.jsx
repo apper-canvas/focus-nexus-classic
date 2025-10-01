@@ -1,9 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import Card from "@/components/atoms/Card";
-import Badge from "@/components/atoms/Badge";
+import { differenceInDays, format } from "date-fns";
 import ApperIcon from "@/components/ApperIcon";
-import { format, differenceInDays } from "date-fns";
+import Badge from "@/components/atoms/Badge";
+import Card from "@/components/atoms/Card";
 
 const STAGES = [
   { id: "Lead", label: "Lead", color: "bg-slate-100" },
@@ -36,20 +36,24 @@ const DealCard = ({ deal, contact, onDragStart, onEdit }) => {
           <ApperIcon name="GripVertical" size={16} className="text-slate-400 flex-shrink-0 ml-2" />
         </div>
         
-        <p className="text-xs text-secondary mb-3">{contact?.company || "No company"}</p>
-        
-        <div className="flex items-center justify-between text-xs">
-          <span className="font-bold text-accent text-lg">
-            ${deal.value.toLocaleString()}
+<p className="text-xs text-secondary mb-3">{contact?.company_c || contact?.Name || "No company"}</p>
+
+<div className="flex items-center justify-between mb-3">
+          <span className="text-xs font-medium text-slate-600">Value:</span>
+          <span className="text-lg font-bold text-accent">
+            ${(deal.value_c || 0).toLocaleString()}
           </span>
+        </div>
+
+        <div className="flex items-center justify-between">
           <Badge variant="default">{daysInStage}d in stage</Badge>
         </div>
 
-        {deal.expectedCloseDate && (
+{deal.expected_close_date_c && (
           <div className="mt-3 pt-3 border-t border-slate-100">
             <div className="flex items-center text-xs text-secondary">
               <ApperIcon name="Calendar" size={12} className="mr-1" />
-              <span>Close: {format(new Date(deal.expectedCloseDate), "MMM dd")}</span>
+              <span>Close: {format(new Date(deal.expected_close_date_c), "MMM dd")}</span>
             </div>
           </div>
         )}
@@ -86,7 +90,7 @@ const PipelineBoard = ({ deals, contacts, onUpdateStage, onEdit }) => {
   };
 
   const getStageDeals = (stageId) => {
-    return deals.filter(deal => deal.stage === stageId);
+return deals.filter(deal => deal.stage_c === stageId);
   };
 
   const getStageValue = (stageId) => {
@@ -123,7 +127,7 @@ const PipelineBoard = ({ deals, contacts, onUpdateStage, onEdit }) => {
 
               <div className="space-y-3 max-h-[calc(100vh-300px)] overflow-y-auto pr-2">
                 {stageDeals.map((deal) => {
-                  const contact = contacts.find(c => c.Id === deal.contactId);
+const contact = contacts.find(c => c.Id === (deal.contact_id_c?.Id || deal.contact_id_c));
                   return (
                     <DealCard
                       key={deal.Id}

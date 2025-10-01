@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { AuthContext } from "@/App";
 import Button from "@/components/atoms/Button";
 import SearchBar from "@/components/molecules/SearchBar";
 import ApperIcon from "@/components/ApperIcon";
-
 const Header = ({ onCreateContact, onCreateDeal }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -33,7 +34,7 @@ const Header = ({ onCreateContact, onCreateDeal }) => {
           />
         </div>
 
-        <div className="flex items-center space-x-3">
+<div className="flex items-center space-x-3">
           {location.pathname === "/contacts" && (
             <Button onClick={onCreateContact}>
               <ApperIcon name="Plus" size={16} className="mr-2" />
@@ -46,6 +47,15 @@ const Header = ({ onCreateContact, onCreateDeal }) => {
               New Deal
             </Button>
           )}
+          <Button variant="secondary" onClick={() => {
+            const authContext = useContext(AuthContext);
+            if (authContext?.logout) {
+              authContext.logout();
+            }
+          }}>
+            <ApperIcon name="LogOut" size={16} className="mr-2" />
+            Logout
+          </Button>
         </div>
       </div>
     </header>

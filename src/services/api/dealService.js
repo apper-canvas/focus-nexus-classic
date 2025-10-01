@@ -1,94 +1,242 @@
-import dealsData from "@/services/mockData/deals.json";
+let apperClient = null;
 
-const STORAGE_KEY = "nexus_crm_deals";
-
-const loadDeals = () => {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored) {
-    return JSON.parse(stored);
+const getApperClient = () => {
+  if (!apperClient) {
+    const { ApperClient } = window.ApperSDK;
+    apperClient = new ApperClient({
+      apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+      apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+    });
   }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(dealsData));
-  return dealsData;
+  return apperClient;
 };
-
-const saveDeals = (deals) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(deals));
-};
-
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const dealService = {
   async getAll() {
-    await delay(300);
-    return [...loadDeals()];
+    try {
+      const client = getApperClient();
+      const params = {
+        fields: [
+          { field: { Name: "Id" } },
+          { field: { Name: "Name" } },
+          { field: { Name: "title_c" } },
+          { field: { Name: "stage_c" } },
+          { field: { Name: "value_c" } },
+          { field: { Name: "expected_close_date_c" } },
+          { field: { Name: "notes_c" } },
+          { field: { Name: "contact_id_c" } },
+          { field: { Name: "sales_rep_id_c" } },
+          { field: { Name: "CreatedOn" } }
+        ],
+        orderBy: [{ fieldName: "CreatedOn", sorttype: "DESC" }]
+      };
+      
+      const response = await client.fetchRecords("deal_c", params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        return [];
+      }
+      
+      return response.data || [];
+    } catch (error) {
+      console.error("Error fetching deals:", error?.response?.data?.message || error);
+      return [];
+    }
   },
 
   async getById(id) {
-    await delay(200);
-    const deals = loadDeals();
-    const deal = deals.find(d => d.Id === parseInt(id));
-    return deal ? { ...deal } : null;
+    try {
+      const client = getApperClient();
+      const params = {
+        fields: [
+          { field: { Name: "Id" } },
+          { field: { Name: "Name" } },
+          { field: { Name: "title_c" } },
+          { field: { Name: "stage_c" } },
+          { field: { Name: "value_c" } },
+          { field: { Name: "expected_close_date_c" } },
+          { field: { Name: "notes_c" } },
+          { field: { Name: "contact_id_c" } },
+          { field: { Name: "sales_rep_id_c" } },
+          { field: { Name: "CreatedOn" } }
+        ]
+      };
+      
+      const response = await client.getRecordById("deal_c", id, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        return null;
+      }
+      
+      return response.data || null;
+    } catch (error) {
+      console.error(`Error fetching deal ${id}:`, error?.response?.data?.message || error);
+      return null;
+    }
   },
 
   async getByContactId(contactId) {
-    await delay(200);
-    const deals = loadDeals();
-    return deals.filter(d => d.contactId === parseInt(contactId));
+    try {
+      const client = getApperClient();
+      const params = {
+        fields: [
+          { field: { Name: "Id" } },
+          { field: { Name: "Name" } },
+          { field: { Name: "title_c" } },
+          { field: { Name: "stage_c" } },
+          { field: { Name: "value_c" } },
+          { field: { Name: "expected_close_date_c" } },
+          { field: { Name: "notes_c" } },
+          { field: { Name: "contact_id_c" } },
+          { field: { Name: "sales_rep_id_c" } }
+        ],
+        where: [
+          {
+            FieldName: "contact_id_c",
+            Operator: "EqualTo",
+            Values: [parseInt(contactId)]
+          }
+        ]
+      };
+      
+      const response = await client.fetchRecords("deal_c", params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        return [];
+      }
+      
+      return response.data || [];
+    } catch (error) {
+      console.error(`Error fetching deals for contact ${contactId}:`, error?.response?.data?.message || error);
+      return [];
+    }
   },
 
-async create(dealData) {
-    await delay(300);
-    const deals = loadDeals();
-    const maxId = deals.reduce((max, d) => Math.max(max, d.Id), 0);
-    const newDeal = {
-      ...dealData,
-      Id: maxId + 1,
-      salesRepId: dealData.salesRepId ? parseInt(dealData.salesRepId) : undefined,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-    deals.push(newDeal);
-    saveDeals(deals);
-    return { ...newDeal };
+  async create(dealData) {
+    try {
+      const client = getApperClient();
+      const params = {
+        records: [{
+          title_c: dealData.title || "",
+          stage_c: dealData.stage || "Lead",
+          value_c: parseFloat(dealData.value) || 0,
+          expected_close_date_c: dealData.expectedCloseDate || "",
+          contact_id_c: parseInt(dealData.contactId),
+          sales_rep_id_c: dealData.salesRepId ? parseInt(dealData.salesRepId) : null,
+          notes_c: dealData.notes || ""
+        }]
+      };
+      
+      const response = await client.createRecord("deal_c", params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        return null;
+      }
+      
+      if (response.results) {
+        const successful = response.results.filter(r => r.success);
+        if (successful.length > 0) {
+          return successful[0].data;
+        }
+      }
+      
+      return null;
+    } catch (error) {
+      console.error("Error creating deal:", error?.response?.data?.message || error);
+      return null;
+    }
   },
 
-async update(id, dealData) {
-    await delay(300);
-    const deals = loadDeals();
-    const index = deals.findIndex(d => d.Id === parseInt(id));
-    if (index === -1) return null;
-    
-    deals[index] = {
-      ...deals[index],
-      ...dealData,
-      Id: parseInt(id),
-      salesRepId: dealData.salesRepId ? parseInt(dealData.salesRepId) : undefined,
-      updatedAt: new Date().toISOString()
-    };
-    saveDeals(deals);
-    return { ...deals[index] };
+  async update(id, dealData) {
+    try {
+      const client = getApperClient();
+      const params = {
+        records: [{
+          Id: parseInt(id),
+          title_c: dealData.title || "",
+          stage_c: dealData.stage || "Lead",
+          value_c: parseFloat(dealData.value) || 0,
+          expected_close_date_c: dealData.expectedCloseDate || "",
+          contact_id_c: parseInt(dealData.contactId),
+          sales_rep_id_c: dealData.salesRepId ? parseInt(dealData.salesRepId) : null,
+          notes_c: dealData.notes || ""
+        }]
+      };
+      
+      const response = await client.updateRecord("deal_c", params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        return null;
+      }
+      
+      if (response.results) {
+        const successful = response.results.filter(r => r.success);
+        if (successful.length > 0) {
+          return successful[0].data;
+        }
+      }
+      
+      return null;
+    } catch (error) {
+      console.error("Error updating deal:", error?.response?.data?.message || error);
+      return null;
+    }
   },
 
   async delete(id) {
-    await delay(300);
-    const deals = loadDeals();
-    const filtered = deals.filter(d => d.Id !== parseInt(id));
-    saveDeals(filtered);
-    return true;
+    try {
+      const client = getApperClient();
+      const params = {
+        RecordIds: [parseInt(id)]
+      };
+      
+      const response = await client.deleteRecord("deal_c", params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        return false;
+      }
+      
+      return true;
+    } catch (error) {
+      console.error("Error deleting deal:", error?.response?.data?.message || error);
+      return false;
+    }
   },
 
   async updateStage(id, stage) {
-    await delay(250);
-    const deals = loadDeals();
-    const index = deals.findIndex(d => d.Id === parseInt(id));
-    if (index === -1) return null;
-    
-    deals[index] = {
-      ...deals[index],
-      stage,
-      updatedAt: new Date().toISOString()
-    };
-    saveDeals(deals);
-    return { ...deals[index] };
+    try {
+      const client = getApperClient();
+      const params = {
+        records: [{
+          Id: parseInt(id),
+          stage_c: stage
+        }]
+      };
+      
+      const response = await client.updateRecord("deal_c", params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        return null;
+      }
+      
+      if (response.results) {
+        const successful = response.results.filter(r => r.success);
+        if (successful.length > 0) {
+          return successful[0].data;
+        }
+      }
+      
+      return null;
+    } catch (error) {
+      console.error("Error updating deal stage:", error?.response?.data?.message || error);
+      return null;
+    }
   }
 };

@@ -77,22 +77,22 @@ const ContactTable = ({ contacts, onEdit, onDelete }) => {
               >
                 <td className="px-6 py-4">
                   <div className="flex items-center space-x-3">
-                    <Avatar name={contact.name} size="md" />
-                    <span className="text-sm font-medium text-slate-800">{contact.name}</span>
+<Avatar name={contact.name_c || contact.Name || "Unknown"} size="md" />
+                    <span className="text-sm font-medium text-slate-800">{contact.name_c || contact.Name || "Unknown"}</span>
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="text-sm text-slate-600">{contact.company}</span>
+<span className="text-sm text-slate-600">{contact.company_c || "No Company"}</span>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="text-sm text-slate-600">{contact.email}</span>
+<span className="text-sm text-slate-600">{contact.email_c || "No Email"}</span>
                 </td>
                 <td className="px-6 py-4">
-                  <span className="text-sm text-slate-600">{contact.phone}</span>
+<span className="text-sm text-slate-600">{contact.phone_c || "No Phone"}</span>
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex flex-wrap gap-1">
-                    {contact.tags.slice(0, 2).map((tag) => (
+{(contact.tags_c ? contact.tags_c.split(",") : []).slice(0, 2).map((tag) => (
                       <Badge key={tag} variant="default">
                         {tag}
                       </Badge>

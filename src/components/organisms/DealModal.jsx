@@ -22,14 +22,14 @@ const DealModal = ({ isOpen, onClose, deal, contacts, salesReps, onSave }) => {
 
 useEffect(() => {
     if (deal) {
-      setFormData({
-        title: deal.title || "",
-        contactId: deal.contactId?.toString() || "",
-        salesRepId: deal.salesRepId?.toString() || "",
-        stage: deal.stage || "Lead",
-        value: deal.value?.toString() || "",
-        expectedCloseDate: deal.expectedCloseDate || "",
-        notes: deal.notes || ""
+setFormData({
+        title: deal.title_c || deal.Name || "",
+        contactId: (deal.contact_id_c?.Id || deal.contact_id_c)?.toString() || "",
+        salesRepId: (deal.sales_rep_id_c?.Id || deal.sales_rep_id_c)?.toString() || "",
+        stage: deal.stage_c || "Lead",
+        value: deal.value_c?.toString() || "",
+        expectedCloseDate: deal.expected_close_date_c || "",
+        notes: deal.notes_c || ""
       });
 } else {
       setFormData({
@@ -142,8 +142,8 @@ className="fixed inset-0 bg-black/50 z-[100]"
                   >
                     <option value="">Select a contact</option>
                     {contacts.map((contact) => (
-                      <option key={contact.Id} value={contact.Id}>
-                        {contact.name} - {contact.company}
+<option key={contact.Id} value={contact.Id}>
+                        {contact.name_c || contact.Name || "Unknown"} - {contact.company_c || "No Company"}
                       </option>
                     ))}
                   </select>
@@ -182,8 +182,8 @@ className="fixed inset-0 bg-black/50 z-[100]"
                 >
                   <option value="">Select a sales rep</option>
                   {salesReps.map((salesRep) => (
-                    <option key={salesRep.Id} value={salesRep.Id}>
-                      {salesRep.name} - {salesRep.title}
+<option key={salesRep.Id} value={salesRep.Id}>
+                      {salesRep.name_c || salesRep.Name || "Unknown"} - {salesRep.title_c || "No Title"}
                     </option>
                   ))}
 </select>

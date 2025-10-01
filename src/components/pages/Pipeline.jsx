@@ -62,15 +62,15 @@ const loadData = async () => {
   const handleSave = async (dealData) => {
     try {
       if (selectedDeal) {
-        await dealService.update(selectedDeal.Id, dealData);
+await dealService.update(selectedDeal.Id, dealData);
         await activityService.create({
           type: "deal_updated",
           entityType: "deal",
           entityId: selectedDeal.Id,
-          description: `Deal '${dealData.title}' updated`
+          description: `Deal '${dealData.title || "Untitled"}' updated`
         });
         toast.success("Deal updated successfully");
-      } else {
+} else {
         const newDeal = await dealService.create(dealData);
         await activityService.create({
           type: "deal_created",

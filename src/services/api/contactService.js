@@ -1,71 +1,169 @@
-import contactsData from "@/services/mockData/contacts.json";
+let apperClient = null;
 
-const STORAGE_KEY = "nexus_crm_contacts";
-
-const loadContacts = () => {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored) {
-    return JSON.parse(stored);
+const getApperClient = () => {
+  if (!apperClient) {
+    const { ApperClient } = window.ApperSDK;
+    apperClient = new ApperClient({
+      apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+      apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+    });
   }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(contactsData));
-  return contactsData;
+  return apperClient;
 };
-
-const saveContacts = (contacts) => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(contacts));
-};
-
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const contactService = {
   async getAll() {
-    await delay(300);
-    return [...loadContacts()];
+    try {
+      const client = getApperClient();
+      const params = {
+        fields: [
+          { field: { Name: "Id" } },
+          { field: { Name: "Name" } },
+          { field: { Name: "name_c" } },
+          { field: { Name: "email_c" } },
+          { field: { Name: "phone_c" } },
+          { field: { Name: "company_c" } },
+          { field: { Name: "tags_c" } },
+          { field: { Name: "notes_c" } },
+          { field: { Name: "CreatedOn" } }
+        ],
+        orderBy: [{ fieldName: "CreatedOn", sorttype: "DESC" }]
+      };
+      
+      const response = await client.fetchRecords("contact_c", params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        return [];
+      }
+      
+      return response.data || [];
+    } catch (error) {
+      console.error("Error fetching contacts:", error?.response?.data?.message || error);
+      return [];
+    }
   },
 
   async getById(id) {
-    await delay(200);
-    const contacts = loadContacts();
-    const contact = contacts.find(c => c.Id === parseInt(id));
-    return contact ? { ...contact } : null;
+    try {
+      const client = getApperClient();
+      const params = {
+        fields: [
+          { field: { Name: "Id" } },
+          { field: { Name: "Name" } },
+          { field: { Name: "name_c" } },
+          { field: { Name: "email_c" } },
+          { field: { Name: "phone_c" } },
+          { field: { Name: "company_c" } },
+          { field: { Name: "tags_c" } },
+          { field: { Name: "notes_c" } },
+          { field: { Name: "CreatedOn" } }
+        ]
+      };
+      
+      const response = await client.getRecordById("contact_c", id, params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        return null;
+      }
+      
+      return response.data || null;
+    } catch (error) {
+      console.error(`Error fetching contact ${id}:`, error?.response?.data?.message || error);
+      return null;
+    }
   },
 
   async create(contactData) {
-    await delay(300);
-    const contacts = loadContacts();
-    const maxId = contacts.reduce((max, c) => Math.max(max, c.Id), 0);
-    const newContact = {
-      ...contactData,
-      Id: maxId + 1,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
-    contacts.push(newContact);
-    saveContacts(contacts);
-    return { ...newContact };
+    try {
+      const client = getApperClient();
+      const params = {
+        records: [{
+          name_c: contactData.name || "",
+          email_c: contactData.email || "",
+          phone_c: contactData.phone || "",
+          company_c: contactData.company || "",
+          tags_c: Array.isArray(contactData.tags) ? contactData.tags.join(",") : contactData.tags || "",
+          notes_c: contactData.notes || ""
+        }]
+      };
+      
+      const response = await client.createRecord("contact_c", params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        return null;
+      }
+      
+      if (response.results) {
+        const successful = response.results.filter(r => r.success);
+        if (successful.length > 0) {
+          return successful[0].data;
+        }
+      }
+      
+      return null;
+    } catch (error) {
+      console.error("Error creating contact:", error?.response?.data?.message || error);
+      return null;
+    }
   },
 
   async update(id, contactData) {
-    await delay(300);
-    const contacts = loadContacts();
-    const index = contacts.findIndex(c => c.Id === parseInt(id));
-    if (index === -1) return null;
-    
-    contacts[index] = {
-      ...contacts[index],
-      ...contactData,
-      Id: parseInt(id),
-      updatedAt: new Date().toISOString()
-    };
-    saveContacts(contacts);
-    return { ...contacts[index] };
+    try {
+      const client = getApperClient();
+      const params = {
+        records: [{
+          Id: parseInt(id),
+          name_c: contactData.name || "",
+          email_c: contactData.email || "",
+          phone_c: contactData.phone || "",
+          company_c: contactData.company || "",
+          tags_c: Array.isArray(contactData.tags) ? contactData.tags.join(",") : contactData.tags || "",
+          notes_c: contactData.notes || ""
+        }]
+      };
+      
+      const response = await client.updateRecord("contact_c", params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        return null;
+      }
+      
+      if (response.results) {
+        const successful = response.results.filter(r => r.success);
+        if (successful.length > 0) {
+          return successful[0].data;
+        }
+      }
+      
+      return null;
+    } catch (error) {
+      console.error("Error updating contact:", error?.response?.data?.message || error);
+      return null;
+    }
   },
 
   async delete(id) {
-    await delay(300);
-    const contacts = loadContacts();
-    const filtered = contacts.filter(c => c.Id !== parseInt(id));
-    saveContacts(filtered);
-    return true;
+    try {
+      const client = getApperClient();
+      const params = {
+        RecordIds: [parseInt(id)]
+      };
+      
+      const response = await client.deleteRecord("contact_c", params);
+      
+      if (!response.success) {
+        console.error(response.message);
+        return false;
+      }
+      
+      return true;
+    } catch (error) {
+      console.error("Error deleting contact:", error?.response?.data?.message || error);
+      return false;
+    }
   }
 };

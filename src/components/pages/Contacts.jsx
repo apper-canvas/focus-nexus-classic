@@ -52,15 +52,15 @@ const Contacts = ({ onCreateContact, createContactTrigger }) => {
   const handleSave = async (contactData) => {
     try {
       if (selectedContact) {
-        await contactService.update(selectedContact.Id, contactData);
+await contactService.update(selectedContact.Id, contactData);
         await activityService.create({
           type: "contact_updated",
           entityType: "contact",
           entityId: selectedContact.Id,
-          description: `Contact ${contactData.name} updated`
+          description: `Contact ${contactData.name || "Unknown"} updated`
         });
         toast.success("Contact updated successfully");
-      } else {
+} else {
         const newContact = await contactService.create(contactData);
         await activityService.create({
           type: "contact_created",

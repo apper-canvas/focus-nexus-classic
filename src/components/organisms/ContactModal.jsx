@@ -18,14 +18,14 @@ const ContactModal = ({ isOpen, onClose, contact, onSave }) => {
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
-    if (contact) {
+if (contact) {
       setFormData({
-        name: contact.name || "",
-        email: contact.email || "",
-        phone: contact.phone || "",
-        company: contact.company || "",
-        tags: Array.isArray(contact.tags) ? contact.tags.join(", ") : "",
-        notes: contact.notes || ""
+        name: contact.name_c || contact.Name || "",
+        email: contact.email_c || "",
+        phone: contact.phone_c || "",
+        company: contact.company_c || "",
+        tags: contact.tags_c ? contact.tags_c.split(",").join(", ") : "",
+        notes: contact.notes_c || ""
       });
     } else {
       setFormData({
