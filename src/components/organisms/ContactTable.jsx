@@ -8,8 +8,9 @@ import { motion } from "framer-motion";
 
 const ContactTable = ({ contacts, onEdit, onDelete }) => {
   const navigate = useNavigate();
-  const [sortField, setSortField] = useState("name_c");
+  const [sortField, setSortField] = useState("name");
   const [sortDirection, setSortDirection] = useState("asc");
+
   const handleSort = (field) => {
     if (sortField === field) {
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
@@ -32,18 +33,18 @@ const ContactTable = ({ contacts, onEdit, onDelete }) => {
         <table className="w-full">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
-<th className="px-6 py-3 text-left">
+              <th className="px-6 py-3 text-left">
                 <button
-                  onClick={() => handleSort("name_c")}
+                  onClick={() => handleSort("name")}
                   className="flex items-center space-x-1 text-xs font-semibold text-slate-600 uppercase hover:text-slate-800"
                 >
                   <span>Contact</span>
                   <ApperIcon name="ArrowUpDown" size={14} />
                 </button>
               </th>
-<th className="px-6 py-3 text-left">
+              <th className="px-6 py-3 text-left">
                 <button
-                  onClick={() => handleSort("company_c")}
+                  onClick={() => handleSort("company")}
                   className="flex items-center space-x-1 text-xs font-semibold text-slate-600 uppercase hover:text-slate-800"
                 >
                   <span>Company</span>
