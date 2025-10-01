@@ -26,7 +26,13 @@ export const dealService = {
           { field: { Name: "notes_c" } },
           { field: { Name: "contact_id_c" } },
           { field: { Name: "sales_rep_id_c" } },
-          { field: { Name: "CreatedOn" } }
+{ field: { Name: "CreatedOn" } },
+          { 
+            field: { Name: "contact_id_c" },
+            referenceField: {
+              field: { Name: "name_c" }
+            }
+          }
         ],
         orderBy: [{ fieldName: "CreatedOn", sorttype: "DESC" }]
       };

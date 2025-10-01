@@ -19,8 +19,9 @@ export const contactService = {
         fields: [
           { field: { Name: "Id" } },
           { field: { Name: "Name" } },
-          { field: { Name: "name_c" } },
+{ field: { Name: "name_c" } },
           { field: { Name: "email_c" } },
+          { field: { Name: "company_c" } },
           { field: { Name: "phone_c" } },
           { field: { Name: "company_c" } },
           { field: { Name: "tags_c" } },
@@ -51,8 +52,9 @@ export const contactService = {
         fields: [
           { field: { Name: "Id" } },
           { field: { Name: "Name" } },
-          { field: { Name: "name_c" } },
+{ field: { Name: "name_c" } },
           { field: { Name: "email_c" } },
+          { field: { Name: "company_c" } },
           { field: { Name: "phone_c" } },
           { field: { Name: "company_c" } },
           { field: { Name: "tags_c" } },
