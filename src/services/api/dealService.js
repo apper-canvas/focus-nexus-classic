@@ -12,7 +12,7 @@ const getApperClient = () => {
 };
 
 export const dealService = {
-  async getAll() {
+async getAll() {
     try {
       const client = getApperClient();
       const params = {
@@ -26,9 +26,15 @@ export const dealService = {
           { field: { Name: "notes_c" } },
           { field: { Name: "contact_id_c" } },
           { field: { Name: "sales_rep_id_c" } },
-{ field: { Name: "CreatedOn" } },
+          { field: { Name: "CreatedOn" } },
           { 
             field: { Name: "contact_id_c" },
+            referenceField: {
+              field: { Name: "name_c" }
+            }
+          },
+          { 
+            field: { Name: "sales_rep_id_c" },
             referenceField: {
               field: { Name: "name_c" }
             }
@@ -51,7 +57,7 @@ export const dealService = {
     }
   },
 
-  async getById(id) {
+async getById(id) {
     try {
       const client = getApperClient();
       const params = {
@@ -65,7 +71,19 @@ export const dealService = {
           { field: { Name: "notes_c" } },
           { field: { Name: "contact_id_c" } },
           { field: { Name: "sales_rep_id_c" } },
-          { field: { Name: "CreatedOn" } }
+          { field: { Name: "CreatedOn" } },
+          { 
+            field: { Name: "contact_id_c" },
+            referenceField: {
+              field: { Name: "name_c" }
+            }
+          },
+          { 
+            field: { Name: "sales_rep_id_c" },
+            referenceField: {
+              field: { Name: "name_c" }
+            }
+          }
         ]
       };
       
@@ -83,7 +101,7 @@ export const dealService = {
     }
   },
 
-  async getByContactId(contactId) {
+async getByContactId(contactId) {
     try {
       const client = getApperClient();
       const params = {
@@ -96,7 +114,19 @@ export const dealService = {
           { field: { Name: "expected_close_date_c" } },
           { field: { Name: "notes_c" } },
           { field: { Name: "contact_id_c" } },
-          { field: { Name: "sales_rep_id_c" } }
+          { field: { Name: "sales_rep_id_c" } },
+          { 
+            field: { Name: "contact_id_c" },
+            referenceField: {
+              field: { Name: "name_c" }
+            }
+          },
+          { 
+            field: { Name: "sales_rep_id_c" },
+            referenceField: {
+              field: { Name: "name_c" }
+            }
+          }
         ],
         where: [
           {

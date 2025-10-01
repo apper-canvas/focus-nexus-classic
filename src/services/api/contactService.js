@@ -12,21 +12,27 @@ const getApperClient = () => {
 };
 
 export const contactService = {
-  async getAll() {
+async getAll() {
     try {
       const client = getApperClient();
       const params = {
         fields: [
           { field: { Name: "Id" } },
           { field: { Name: "Name" } },
-{ field: { Name: "name_c" } },
+          { field: { Name: "name_c" } },
           { field: { Name: "email_c" } },
           { field: { Name: "company_c" } },
           { field: { Name: "phone_c" } },
-          { field: { Name: "company_c" } },
           { field: { Name: "tags_c" } },
           { field: { Name: "notes_c" } },
-          { field: { Name: "CreatedOn" } }
+          { field: { Name: "sales_rep_id_c" } },
+          { field: { Name: "CreatedOn" } },
+          { 
+            field: { Name: "sales_rep_id_c" },
+            referenceField: {
+              field: { Name: "name_c" }
+            }
+          }
         ],
         orderBy: [{ fieldName: "CreatedOn", sorttype: "DESC" }]
       };
@@ -45,21 +51,27 @@ export const contactService = {
     }
   },
 
-  async getById(id) {
+async getById(id) {
     try {
       const client = getApperClient();
       const params = {
         fields: [
           { field: { Name: "Id" } },
           { field: { Name: "Name" } },
-{ field: { Name: "name_c" } },
+          { field: { Name: "name_c" } },
           { field: { Name: "email_c" } },
           { field: { Name: "company_c" } },
           { field: { Name: "phone_c" } },
-          { field: { Name: "company_c" } },
           { field: { Name: "tags_c" } },
           { field: { Name: "notes_c" } },
-          { field: { Name: "CreatedOn" } }
+          { field: { Name: "sales_rep_id_c" } },
+          { field: { Name: "CreatedOn" } },
+          { 
+            field: { Name: "sales_rep_id_c" },
+            referenceField: {
+              field: { Name: "name_c" }
+            }
+          }
         ]
       };
       
