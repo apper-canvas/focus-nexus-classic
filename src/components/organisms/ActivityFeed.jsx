@@ -33,7 +33,12 @@ const ActivityFeed = ({ activities }) => {
             <div className="flex-1 min-w-0">
               <p className="text-sm text-slate-700">{activity.description}</p>
               <p className="text-xs text-secondary mt-1">
-                {formatDistanceToNow(new Date(activity.timestamp), { addSuffix: true })}
+{(() => {
+                  if (!activity.timestamp) return 'Just now';
+                  const date = new Date(activity.timestamp);
+                  if (isNaN(date.getTime())) return 'Just now';
+                  return formatDistanceToNow(date, { addSuffix: true });
+                })()}
               </p>
             </div>
           </motion.div>

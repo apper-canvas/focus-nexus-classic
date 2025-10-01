@@ -149,7 +149,12 @@ const ContactDetail = () => {
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-slate-700">{activity.description_c || "Activity"}</p>
                       <p className="text-xs text-secondary mt-1">
-                        {format(new Date(activity.timestamp_c), "MMM dd, yyyy 'at' h:mm a")}
+{(() => {
+                          if (!activity.timestamp_c) return 'No date';
+                          const date = new Date(activity.timestamp_c);
+                          if (isNaN(date.getTime())) return 'No date';
+                          return format(date, "MMM dd, yyyy 'at' h:mm a");
+                        })()}
                       </p>
                     </div>
                   </div>
