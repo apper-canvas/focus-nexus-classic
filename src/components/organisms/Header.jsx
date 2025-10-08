@@ -1,11 +1,11 @@
-import React, { useContext, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { AuthContext } from "@/App";
-import ApperIcon from "@/components/ApperIcon";
-import SearchBar from "@/components/molecules/SearchBar";
 import Button from "@/components/atoms/Button";
-const Header = ({ onCreateContact, onCreateDeal, onCreateQuote }) => {
+import SearchBar from "@/components/molecules/SearchBar";
+import ApperIcon from "@/components/ApperIcon";
+const Header = ({ onCreateContact, onCreateDeal }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,33 +36,27 @@ const Header = ({ onCreateContact, onCreateDeal, onCreateQuote }) => {
         </div>
 
 <div className="flex items-center space-x-3">
-{location.pathname === "/contacts" && (
-          <Button onClick={onCreateContact}>
-            <ApperIcon name="Plus" size={16} className="mr-2" />
-            New Contact
+          {location.pathname === "/contacts" && (
+            <Button onClick={onCreateContact}>
+              <ApperIcon name="Plus" size={16} className="mr-2" />
+              New Contact
+            </Button>
+          )}
+          {location.pathname === "/pipeline" && (
+            <Button onClick={onCreateDeal}>
+              <ApperIcon name="Plus" size={16} className="mr-2" />
+              New Deal
+            </Button>
+          )}
+<Button variant="secondary" onClick={() => {
+            if (authContext?.logout) {
+              authContext.logout();
+            }
+          }}>
+            <ApperIcon name="LogOut" size={16} className="mr-2" />
+            Logout
           </Button>
-        )}
-        {location.pathname === "/pipeline" && (
-          <Button onClick={onCreateDeal}>
-            <ApperIcon name="Plus" size={16} className="mr-2" />
-            New Deal
-          </Button>
-        )}
-        {location.pathname === "/quotes" && (
-          <Button onClick={onCreateQuote}>
-            <ApperIcon name="Plus" size={16} className="mr-2" />
-            New Quote
-          </Button>
-        )}
-        <Button variant="secondary" onClick={() => {
-          if (authContext?.logout) {
-            authContext.logout();
-          }
-        }}>
-          <ApperIcon name="LogOut" size={16} className="mr-2" />
-          Logout
-        </Button>
-      </div>
+        </div>
       </div>
     </header>
   );
