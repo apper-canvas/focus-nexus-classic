@@ -32,13 +32,15 @@ export const activityService = {
       const response = await client.fetchRecords("activity_c", params);
       
       if (!response.success) {
-        console.error(response.message);
+console.error("Error fetching activities:", response?.message || "No response received");
         return [];
       }
-      
       return response.data || [];
     } catch (error) {
-      console.error("Error fetching activities:", error?.response?.data?.message || error);
+console.error("Error fetching activities:", error?.message || error?.response?.data?.message || error);
+      if (error?.message === "Network Error") {
+        console.error("Network Error Details: Check ApperClient initialization");
+      }
       return [];
     }
   },
@@ -73,15 +75,17 @@ export const activityService = {
       };
       
       const response = await client.fetchRecords("activity_c", params);
-      
-      if (!response.success) {
-        console.error(response.message);
+if (!response || !response.success) {
+        console.error(`Error fetching activities for ${entityType} ${entityId}:`, response?.message || "No response received");
         return [];
       }
       
-      return response.data || [];
+return response.data || [];
     } catch (error) {
-      console.error(`Error fetching activities for ${entityType} ${entityId}:`, error?.response?.data?.message || error);
+      console.error(`Error fetching activities for ${entityType} ${entityId}:`, error?.message || error?.response?.data?.message || error);
+      if (error?.message === "Network Error") {
+        console.error("Network Error Details: Check ApperClient initialization");
+      }
       return [];
     }
   },
@@ -101,8 +105,8 @@ export const activityService = {
       
       const response = await client.createRecord("activity_c", params);
       
-      if (!response.success) {
-        console.error(response.message);
+if (!response || !response.success) {
+        console.error("Error creating activity:", response?.message || "No response received");
         return null;
       }
       
@@ -115,7 +119,10 @@ export const activityService = {
       
       return null;
     } catch (error) {
-      console.error("Error creating activity:", error?.response?.data?.message || error);
+console.error("Error creating activity:", error?.message || error?.response?.data?.message || error);
+      if (error?.message === "Network Error") {
+        console.error("Network Error Details: Check ApperClient initialization");
+      }
       return null;
     }
   }

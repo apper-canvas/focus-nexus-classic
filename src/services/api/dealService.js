@@ -43,16 +43,23 @@ async getAll() {
         orderBy: [{ fieldName: "CreatedOn", sorttype: "DESC" }]
       };
       
+if (!client) {
+        console.error("Error fetching deals: ApperClient not initialized");
+        return [];
+      }
       const response = await client.fetchRecords("deal_c", params);
       
-      if (!response.success) {
-        console.error(response.message);
+if (!response || !response.success) {
+        console.error("Error fetching deals:", response?.message || "No response received");
         return [];
       }
       
       return response.data || [];
-    } catch (error) {
-      console.error("Error fetching deals:", error?.response?.data?.message || error);
+} catch (error) {
+      console.error("Error fetching deals:", error?.message || error?.response?.data?.message || error);
+      if (error?.message === "Network Error") {
+        console.error("Network Error Details: Check if ApperClient is properly initialized with valid credentials");
+      }
       return [];
     }
   },
@@ -88,15 +95,17 @@ async getById(id) {
       };
       
       const response = await client.getRecordById("deal_c", id, params);
-      
-      if (!response.success) {
-        console.error(response.message);
+if (!response || !response.success) {
+        console.error(`Error fetching deal ${id}:`, response?.message || "No response received");
         return null;
       }
       
-      return response.data || null;
+return response.data || null;
     } catch (error) {
-      console.error(`Error fetching deal ${id}:`, error?.response?.data?.message || error);
+      console.error(`Error fetching deal ${id}:`, error?.message || error?.response?.data?.message || error);
+      if (error?.message === "Network Error") {
+        console.error("Network Error Details: Check ApperClient initialization");
+      }
       return null;
     }
   },
@@ -137,16 +146,22 @@ async getByContactId(contactId) {
         ]
       };
       
-      const response = await client.fetchRecords("deal_c", params);
-      
-      if (!response.success) {
-        console.error(response.message);
+if (!client) {
+        console.error(`Error fetching deals for contact ${contactId}: ApperClient not initialized`);
         return [];
       }
+      const response = await client.fetchRecords("deal_c", params);
       
-      return response.data || [];
+      if (!response || !response.success) {
+        console.error(`Error fetching deals for contact ${contactId}:`, response?.message || "No response received");
+        return [];
+      }
+return response.data || [];
     } catch (error) {
-      console.error(`Error fetching deals for contact ${contactId}:`, error?.response?.data?.message || error);
+      console.error(`Error fetching deals for contact ${contactId}:`, error?.message || error?.response?.data?.message || error);
+      if (error?.message === "Network Error") {
+        console.error("Network Error Details: Check ApperClient initialization");
+      }
       return [];
     }
   },
@@ -168,8 +183,8 @@ async getByContactId(contactId) {
       
       const response = await client.createRecord("deal_c", params);
       
-      if (!response.success) {
-        console.error(response.message);
+if (!response || !response.success) {
+        console.error("Error creating deal:", response?.message || "No response received");
         return null;
       }
       
@@ -182,7 +197,10 @@ async getByContactId(contactId) {
       
       return null;
     } catch (error) {
-      console.error("Error creating deal:", error?.response?.data?.message || error);
+console.error("Error creating deal:", error?.message || error?.response?.data?.message || error);
+      if (error?.message === "Network Error") {
+        console.error("Network Error Details: Check ApperClient initialization");
+      }
       return null;
     }
   },
@@ -205,8 +223,8 @@ async getByContactId(contactId) {
       
       const response = await client.updateRecord("deal_c", params);
       
-      if (!response.success) {
-        console.error(response.message);
+if (!response || !response.success) {
+        console.error("Error updating deal:", response?.message || "No response received");
         return null;
       }
       
@@ -219,7 +237,10 @@ async getByContactId(contactId) {
       
       return null;
     } catch (error) {
-      console.error("Error updating deal:", error?.response?.data?.message || error);
+console.error("Error updating deal:", error?.message || error?.response?.data?.message || error);
+      if (error?.message === "Network Error") {
+        console.error("Network Error Details: Check ApperClient initialization");
+      }
       return null;
     }
   },
@@ -234,13 +255,15 @@ async getByContactId(contactId) {
       const response = await client.deleteRecord("deal_c", params);
       
       if (!response.success) {
-        console.error(response.message);
+console.error("Error deleting deal:", response?.message || "No response received");
         return false;
       }
-      
       return true;
     } catch (error) {
-      console.error("Error deleting deal:", error?.response?.data?.message || error);
+console.error("Error deleting deal:", error?.message || error?.response?.data?.message || error);
+      if (error?.message === "Network Error") {
+        console.error("Network Error Details: Check ApperClient initialization");
+      }
       return false;
     }
   },
@@ -257,8 +280,8 @@ async getByContactId(contactId) {
       
       const response = await client.updateRecord("deal_c", params);
       
-      if (!response.success) {
-        console.error(response.message);
+if (!response || !response.success) {
+        console.error("Error updating deal stage:", response?.message || "No response received");
         return null;
       }
       
@@ -271,7 +294,10 @@ async getByContactId(contactId) {
       
       return null;
     } catch (error) {
-      console.error("Error updating deal stage:", error?.response?.data?.message || error);
+console.error("Error updating deal stage:", error?.message || error?.response?.data?.message || error);
+      if (error?.message === "Network Error") {
+        console.error("Network Error Details: Check ApperClient initialization");
+      }
       return null;
     }
   }

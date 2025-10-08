@@ -39,14 +39,17 @@ async getAll() {
       
       const response = await client.fetchRecords("contact_c", params);
       
-      if (!response.success) {
-        console.error(response.message);
+if (!response || !response.success) {
+        console.error("Error fetching contacts:", response?.message || "No response received");
         return [];
       }
       
       return response.data || [];
-    } catch (error) {
-      console.error("Error fetching contacts:", error?.response?.data?.message || error);
+} catch (error) {
+      console.error("Error fetching contacts:", error?.message || error?.response?.data?.message || error);
+      if (error?.message === "Network Error") {
+        console.error("Network Error Details: Check ApperClient initialization");
+      }
       return [];
     }
   },
@@ -77,14 +80,17 @@ async getById(id) {
       
       const response = await client.getRecordById("contact_c", id, params);
       
-      if (!response.success) {
-        console.error(response.message);
+if (!response || !response.success) {
+        console.error(`Error fetching contact ${id}:`, response?.message || "No response received");
         return null;
       }
       
       return response.data || null;
-    } catch (error) {
-      console.error(`Error fetching contact ${id}:`, error?.response?.data?.message || error);
+} catch (error) {
+      console.error(`Error fetching contact ${id}:`, error?.message || error?.response?.data?.message || error);
+      if (error?.message === "Network Error") {
+        console.error("Network Error Details: Check ApperClient initialization");
+      }
       return null;
     }
   },
@@ -105,8 +111,8 @@ async getById(id) {
       
       const response = await client.createRecord("contact_c", params);
       
-      if (!response.success) {
-        console.error(response.message);
+if (!response || !response.success) {
+        console.error("Error creating contact:", response?.message || "No response received");
         return null;
       }
       
@@ -119,7 +125,10 @@ async getById(id) {
       
       return null;
     } catch (error) {
-      console.error("Error creating contact:", error?.response?.data?.message || error);
+console.error("Error creating contact:", error?.message || error?.response?.data?.message || error);
+      if (error?.message === "Network Error") {
+        console.error("Network Error Details: Check ApperClient initialization");
+      }
       return null;
     }
   },
@@ -141,8 +150,8 @@ async getById(id) {
       
       const response = await client.updateRecord("contact_c", params);
       
-      if (!response.success) {
-        console.error(response.message);
+if (!response || !response.success) {
+        console.error("Error updating contact:", response?.message || "No response received");
         return null;
       }
       
@@ -155,7 +164,10 @@ async getById(id) {
       
       return null;
     } catch (error) {
-      console.error("Error updating contact:", error?.response?.data?.message || error);
+console.error("Error updating contact:", error?.message || error?.response?.data?.message || error);
+      if (error?.message === "Network Error") {
+        console.error("Network Error Details: Check ApperClient initialization");
+      }
       return null;
     }
   },
@@ -167,16 +179,18 @@ async getById(id) {
         RecordIds: [parseInt(id)]
       };
       
-      const response = await client.deleteRecord("contact_c", params);
+const response = await client.deleteRecord("contact_c", params);
       
-      if (!response.success) {
-        console.error(response.message);
+      if (!response || !response.success) {
+        console.error("Error deleting contact:", response?.message || "No response received");
         return false;
       }
-      
-      return true;
+return true;
     } catch (error) {
-      console.error("Error deleting contact:", error?.response?.data?.message || error);
+      console.error("Error deleting contact:", error?.message || error?.response?.data?.message || error);
+      if (error?.message === "Network Error") {
+        console.error("Network Error Details: Check ApperClient initialization");
+      }
       return false;
     }
   }
