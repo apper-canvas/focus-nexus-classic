@@ -2,22 +2,23 @@ import React, { createContext, useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { clearUser, setUser } from "@/store/userSlice";
+import Quotes from "@/components/pages/Quotes";
+import ApperIcon from "@/components/ApperIcon";
+import PromptPassword from "@/components/pages/PromptPassword";
+import ErrorPage from "@/components/pages/ErrorPage";
+import Callback from "@/components/pages/Callback";
+import Pipeline from "@/components/pages/Pipeline";
+import Dashboard from "@/components/pages/Dashboard";
+import ResetPassword from "@/components/pages/ResetPassword";
+import ContactDetail from "@/components/pages/ContactDetail";
 import Login from "@/components/pages/Login";
 import Signup from "@/components/pages/Signup";
-import Callback from "@/components/pages/Callback";
-import ErrorPage from "@/components/pages/ErrorPage";
-import ResetPassword from "@/components/pages/ResetPassword";
-import PromptPassword from "@/components/pages/PromptPassword";
-import ApperIcon from "@/components/ApperIcon";
-import Dashboard from "@/components/pages/Dashboard";
-import ContactDetail from "@/components/pages/ContactDetail";
-import Pipeline from "@/components/pages/Pipeline";
 import Contacts from "@/components/pages/Contacts";
-import Button from "@/components/atoms/Button";
-import Header from "@/components/organisms/Header";
-import MobileSidebar from "@/components/organisms/MobileSidebar";
 import Sidebar from "@/components/organisms/Sidebar";
+import MobileSidebar from "@/components/organisms/MobileSidebar";
+import Header from "@/components/organisms/Header";
+import Button from "@/components/atoms/Button";
+import { clearUser, setUser } from "@/store/userSlice";
 
 export const AuthContext = createContext(null);
 
@@ -25,6 +26,7 @@ function AppContent() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [createContactTrigger, setCreateContactTrigger] = useState(0);
   const [createDealTrigger, setCreateDealTrigger] = useState(0);
+  const [createQuoteTrigger, setCreateQuoteTrigger] = useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [isInitialized, setIsInitialized] = useState(false);
@@ -107,7 +109,7 @@ function AppContent() {
     }
   };
 
-  const handleCreateContact = () => {
+const handleCreateContact = () => {
     setCreateContactTrigger(prev => prev + 1);
   };
 
@@ -115,6 +117,9 @@ function AppContent() {
     setCreateDealTrigger(prev => prev + 1);
   };
 
+  const handleCreateQuote = () => {
+    setCreateQuoteTrigger(prev => prev + 1);
+  };
 if (!isInitialized) {
     return (
       <div className="loading flex items-center justify-center p-6 h-screen w-full">
@@ -179,15 +184,24 @@ if (!isInitialized) {
                         onCreateDeal={handleCreateDeal}
                         createDealTrigger={createDealTrigger}
                       />
-                    } 
-                  />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/signup" element={<Signup />} />
-                  <Route path="/callback" element={<Callback />} />
-                  <Route path="/error" element={<ErrorPage />} />
-                  <Route path="/prompt-password/:appId/:emailAddress/:provider" element={<PromptPassword />} />
-                  <Route path="/reset-password/:appId/:fields" element={<ResetPassword />} />
-                </Routes>
+} 
+                />
+                <Route 
+                  path="/quotes" 
+                  element={
+                    <Quotes 
+                      onCreateQuote={handleCreateQuote} 
+                      createQuoteTrigger={createQuoteTrigger} 
+                    /> 
+                  } 
+                />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/callback" element={<Callback />} />
+                <Route path="/error" element={<ErrorPage />} />
+                <Route path="/prompt-password/:appId/:emailAddress/:provider" element={<PromptPassword />} />
+                <Route path="/reset-password/:appId/:fields" element={<ResetPassword />} />
+              </Routes>
               </div>
             </main>
           </div>

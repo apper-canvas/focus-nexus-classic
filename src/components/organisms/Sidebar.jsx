@@ -3,9 +3,10 @@ import ApperIcon from "@/components/ApperIcon";
 import { cn } from "@/utils/cn";
 
 const Sidebar = () => {
-  const navItems = [
+const navItems = [
     { path: "/", icon: "LayoutDashboard", label: "Dashboard" },
     { path: "/contacts", icon: "Users", label: "Contacts" },
+    { path: "/quotes", icon: "FileText", label: "Quotes" },
     { path: "/pipeline", icon: "TrendingUp", label: "Pipeline" }
   ];
 
