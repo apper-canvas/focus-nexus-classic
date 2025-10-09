@@ -2,22 +2,23 @@ import React, { createContext, useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { clearUser, setUser } from "@/store/userSlice";
+import Companies from "@/components/pages/Companies";
+import ApperIcon from "@/components/ApperIcon";
+import PromptPassword from "@/components/pages/PromptPassword";
+import ErrorPage from "@/components/pages/ErrorPage";
+import Callback from "@/components/pages/Callback";
+import Pipeline from "@/components/pages/Pipeline";
+import Dashboard from "@/components/pages/Dashboard";
+import ResetPassword from "@/components/pages/ResetPassword";
+import ContactDetail from "@/components/pages/ContactDetail";
 import Login from "@/components/pages/Login";
 import Signup from "@/components/pages/Signup";
-import Callback from "@/components/pages/Callback";
-import ErrorPage from "@/components/pages/ErrorPage";
-import ResetPassword from "@/components/pages/ResetPassword";
-import PromptPassword from "@/components/pages/PromptPassword";
-import ApperIcon from "@/components/ApperIcon";
-import Dashboard from "@/components/pages/Dashboard";
-import ContactDetail from "@/components/pages/ContactDetail";
-import Pipeline from "@/components/pages/Pipeline";
 import Contacts from "@/components/pages/Contacts";
-import Button from "@/components/atoms/Button";
-import Header from "@/components/organisms/Header";
-import MobileSidebar from "@/components/organisms/MobileSidebar";
 import Sidebar from "@/components/organisms/Sidebar";
+import MobileSidebar from "@/components/organisms/MobileSidebar";
+import Header from "@/components/organisms/Header";
+import Button from "@/components/atoms/Button";
+import { clearUser, setUser } from "@/store/userSlice";
 
 export const AuthContext = createContext(null);
 
@@ -172,6 +173,7 @@ if (!isInitialized) {
                     } 
                   />
                   <Route path="/contacts/:id" element={<ContactDetail />} />
+<Route path="/companies" element={<Companies />} />
                   <Route 
                     path="/pipeline" 
                     element={
