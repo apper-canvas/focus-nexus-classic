@@ -66,6 +66,12 @@
         ]
       },
       "redirectOnDeny": "/login",
+"excludeRedirectQuery": false
+    }
+  },
+  "leads": {
+    "access": "authenticated",
+    "redirectConfig": {
       "excludeRedirectQuery": false
     }
   },

@@ -11,13 +11,13 @@ const Signup = lazy(() => import('@/components/pages/Signup'));
 const Contacts = lazy(() => import('@/components/pages/Contacts'));
 const ContactDetail = lazy(() => import('@/components/pages/ContactDetail'));
 const Companies = lazy(() => import('@/components/pages/Companies'));
+const Leads = lazy(() => import('@/components/pages/Leads'));
 const Pipeline = lazy(() => import('@/components/pages/Pipeline'));
 const Callback = lazy(() => import('@/components/pages/Callback'));
 const ErrorPage = lazy(() => import('@/components/pages/ErrorPage'));
 const ResetPassword = lazy(() => import('@/components/pages/ResetPassword'));
 const PromptPassword = lazy(() => import('@/components/pages/PromptPassword'));
 const NotFound = lazy(() => import('@/components/pages/NotFound'));
-
 // Loading spinner component
 const LoadingSpinner = () => (
   <div className="min-h-screen flex items-center justify-center">
@@ -103,9 +103,14 @@ export const router = createBrowserRouter([
             title: 'Companies'
           }),
           createRoute({
-            path: 'pipeline',
+path: 'pipeline',
             element: <Pipeline />,
             title: 'Pipeline'
+          }),
+          ...getRouteConfig({
+            path: 'leads',
+            element: <Leads />,
+            title: 'Leads'
           })
         ]
       },

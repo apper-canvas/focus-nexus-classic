@@ -8,11 +8,11 @@ import Button from "@/components/atoms/Button";
 import ApperIcon from "@/components/ApperIcon";
 
 const MainLayout = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [createContactTrigger, setCreateContactTrigger] = useState(0);
   const [createDealTrigger, setCreateDealTrigger] = useState(0);
-
-  const handleCreateContact = () => {
+  const [createLeadTrigger, setCreateLeadTrigger] = useState(0);
+const handleCreateContact = () => {
     setCreateContactTrigger(prev => prev + 1);
   };
 
@@ -20,12 +20,17 @@ const MainLayout = () => {
     setCreateDealTrigger(prev => prev + 1);
   };
 
+  const handleCreateLead = () => {
+    setCreateLeadTrigger(prev => prev + 1);
+  };
   // Context to pass to page components via Outlet
-  const outletContext = {
+const outletContext = {
     onCreateContact: handleCreateContact,
     onCreateDeal: handleCreateDeal,
+    onCreateLead: handleCreateLead,
     createContactTrigger,
-    createDealTrigger
+    createDealTrigger,
+    createLeadTrigger
   };
 
   return (

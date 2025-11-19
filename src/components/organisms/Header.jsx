@@ -5,7 +5,7 @@ import { useAuth } from "@/layouts/Root";
 import Button from "@/components/atoms/Button";
 import SearchBar from "@/components/molecules/SearchBar";
 import ApperIcon from "@/components/ApperIcon";
-const Header = ({ onCreateContact, onCreateDeal }) => {
+const Header = ({ onCreateContact, onCreateDeal, onCreateLead }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,10 +36,16 @@ const { logout } = useAuth();
         </div>
 
 <div className="flex items-center space-x-3">
-          {location.pathname === "/contacts" && (
+{location.pathname === "/contacts" && (
             <Button onClick={onCreateContact}>
               <ApperIcon name="Plus" size={16} className="mr-2" />
               New Contact
+            </Button>
+          )}
+          {location.pathname === "/leads" && (
+            <Button onClick={onCreateLead}>
+              <ApperIcon name="Plus" size={16} className="mr-2" />
+              New Lead
             </Button>
           )}
           {location.pathname === "/pipeline" && (
