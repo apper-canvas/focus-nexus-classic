@@ -7,21 +7,22 @@ import FormField from '@/components/molecules/FormField';
 import ApperIcon from '@/components/ApperIcon';
 import { cn } from '@/utils/cn';
 import { salesRepService } from '@/services/api/salesRepService';
-
+import { contactService } from '@/services/api/contactService';
 const LeadModal = ({ isOpen, onClose, onSave, lead = null }) => {
   const { user } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const [salesReps, setSalesReps] = useState([]);
   const [salesRepsLoading, setSalesRepsLoading] = useState(true);
   const [showMore, setShowMore] = useState(false);
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     lead_name_c: '',
     email_c: '',
     phone_c: '',
     lead_source_c: '',
     lead_status_c: 'New',
     priority_c: 'Medium',
-    assigned_to_c: ''
+    assigned_to_c: '',
+    contact_c: ''
   });
   const [errors, setErrors] = useState({});
 
@@ -44,7 +45,8 @@ const LeadModal = ({ isOpen, onClose, onSave, lead = null }) => {
           lead_source_c: lead.lead_source_c || '',
           lead_status_c: lead.lead_status_c || 'New',
           priority_c: lead.priority_c || 'Medium',
-          assigned_to_c: lead.assigned_to_c?.Id || ''
+assigned_to_c: lead.assigned_to_c?.Id || '',
+          contact_c: lead.contact_c?.Id || ''
         });
         setShowMore(true); // Show full form for editing
       } else {
@@ -56,7 +58,8 @@ const LeadModal = ({ isOpen, onClose, onSave, lead = null }) => {
           lead_source_c: '',
           lead_status_c: 'New',
           priority_c: 'Medium',
-          assigned_to_c: user?.userId || ''
+          assigned_to_c: user?.userId || '',
+          contact_c: ''
         });
         setShowMore(false); // Start with quick add view
       }
@@ -86,6 +89,7 @@ const validateForm = () => {
     const phone = String(formData.phone_c || '').trim();
     const leadSource = String(formData.lead_source_c || '').trim();
     const assignedTo = formData.assigned_to_c;
+    const contact = formData.contact_c;
 
     // Required fields validation with improved string handling
     if (!leadName || leadName.length === 0) {
@@ -159,6 +163,31 @@ const handleChange = (field, value) => {
       }));
     }
   };
+
+  // Add state for contacts
+  const [contacts, setContacts] = useState([]);
+  const [contactsLoading, setContactsLoading] = useState(false);
+
+  // Fetch contacts for dropdown
+  useEffect(() => {
+    const fetchContacts = async () => {
+      setContactsLoading(true);
+      try {
+        const contactsData = await contactService.getAll();
+        setContacts(contactsData || []);
+      } catch (error) {
+        console.error('Error fetching contacts:', error);
+        toast.error('Failed to load contacts');
+        setContacts([]);
+      } finally {
+        setContactsLoading(false);
+      }
+    };
+
+    if (isOpen) {
+      fetchContacts();
+    }
+  }, [isOpen]);
 
   const getPriorityStyle = (priority) => {
     const priorityObj = priorities.find(p => p.value === priority);
@@ -304,13 +333,34 @@ const handleChange = (field, value) => {
 
           {/* Additional Fields Section */}
           {(showMore || lead) && (
-            <div className="space-y-4 mb-6">
+<div className="space-y-4 mb-6">
               <h3 className="text-lg font-medium text-gray-900 flex items-center">
                 <ApperIcon name="Settings" size={20} className="mr-2" />
                 Lead Details
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField label="Contact" error={errors.contact_c}>
+                  <select
+                    value={formData.contact_c}
+                    onChange={(e) => handleChange('contact_c', e.target.value)}
+                    className={cn(
+                      "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary",
+                      errors.contact_c && "border-red-500 focus:ring-red-500 focus:border-red-500"
+                    )}
+                    disabled={contactsLoading}
+                  >
+                    <option value="">
+                      {contactsLoading ? 'Loading contacts...' : 'Select a contact (optional)'}
+                    </option>
+                    {contacts.map(contact => (
+                      <option key={contact.Id} value={contact.Id}>
+                        {contact.name_c} {contact.email_c && `(${contact.email_c})`}
+                      </option>
+                    ))}
+                  </select>
+                </FormField>
+
                 <FormField label="Lead Status">
                   <select
                     value={formData.lead_status_c}

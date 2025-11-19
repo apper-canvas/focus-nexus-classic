@@ -205,9 +205,13 @@ const Leads = () => {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{lead.email_c}</div>
-                      <div className="text-sm text-gray-500">{lead.phone_c}</div>
+<td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">
+                        {lead.contact_c?.name_c || 'No contact assigned'}
+                      </div>
+                      {lead.contact_c?.email_c && (
+                        <div className="text-sm text-gray-500">{lead.contact_c.email_c}</div>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
