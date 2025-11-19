@@ -210,7 +210,7 @@ const handleChange = (field, value) => {
               />
             </FormField>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 label="Email"
                 error={errors.email_c}
@@ -258,7 +258,7 @@ const handleChange = (field, value) => {
                   )}
                 >
                   <option value="">Select lead source</option>
-                  {leadSources.map(source => (
+                  {['Website', 'Referral', 'Cold Call', 'Social Media', 'Event', 'Advertisement', 'Other'].map(source => (
                     <option key={source} value={source}>{source}</option>
                   ))}
                 </select>
@@ -302,7 +302,7 @@ const handleChange = (field, value) => {
             </div>
           )}
 
-          {/* Additional Fields - Shown when expanded or editing */}
+          {/* Additional Fields Section */}
           {(showMore || lead) && (
             <div className="space-y-4 mb-6">
               <h3 className="text-lg font-medium text-gray-900 flex items-center">
@@ -317,7 +317,8 @@ const handleChange = (field, value) => {
                     onChange={(e) => handleChange('lead_status_c', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                   >
-                    {leadStatuses.map(status => (
+                    <option value="">Select lead status</option>
+                    {['New', 'Contacted', 'Qualified', 'Unqualified'].map(status => (
                       <option key={status} value={status}>{status}</option>
                     ))}
                   </select>
@@ -329,7 +330,12 @@ const handleChange = (field, value) => {
                     onChange={(e) => handleChange('priority_c', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                   >
-                    {priorities.map(priority => (
+                    <option value="">Select priority</option>
+                    {[
+                      { value: 'High', label: 'High' },
+                      { value: 'Medium', label: 'Medium' },
+                      { value: 'Low', label: 'Low' }
+                    ].map(priority => (
                       <option key={priority.value} value={priority.value}>
                         {priority.label}
                       </option>
