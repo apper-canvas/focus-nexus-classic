@@ -78,26 +78,26 @@ const LeadModal = ({ isOpen, onClose, onSave, lead = null }) => {
   };
 
   const validateForm = () => {
-    const newErrors = {};
+const newErrors = {};
 
-    // Required fields validation
-    if (!formData.lead_name_c.trim()) {
+    // Required fields validation with proper null checking
+    if (!formData.lead_name_c?.trim()) {
       newErrors.lead_name_c = 'Lead name is required';
     }
 
-    if (!formData.email_c.trim()) {
+    if (!formData.email_c?.trim()) {
       newErrors.email_c = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email_c)) {
+    } else if (!/\S+@\S+\.\S+/.test(formData.email_c.trim())) {
       newErrors.email_c = 'Please enter a valid email address';
     }
 
-    if (!formData.phone_c.trim()) {
+    if (!formData.phone_c?.trim()) {
       newErrors.phone_c = 'Phone is required';
     }
 
     // For quick add, only require minimal fields
     if (!showMore) {
-      if (!formData.lead_source_c) {
+      if (!formData.lead_source_c?.trim()) {
         newErrors.lead_source_c = 'Lead source is required';
       }
       if (!formData.assigned_to_c) {
