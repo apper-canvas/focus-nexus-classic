@@ -65,7 +65,7 @@ const ContactDetail = () => {
 <Avatar name={contact.name_c || contact.Name || "Unknown"} size="lg" />
                 <div>
                   <h2 className="text-2xl font-bold text-slate-800">{contact.name_c || contact.Name || "Unknown"}</h2>
-                  <p className="text-sm text-secondary">{contact.company_c || "No Company"}</p>
+<p className="text-sm text-secondary">{contact.company_c?.name_c || contact.company_c?.Name || "No Company"}</p>
                 </div>
               </div>
               <Button variant="outline" onClick={() => navigate(`/contacts`)}>

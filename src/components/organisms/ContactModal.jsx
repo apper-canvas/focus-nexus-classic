@@ -4,9 +4,9 @@ import { toast } from "react-toastify";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import FormField from "@/components/molecules/FormField";
-
+import { companyService } from "@/services/api/companyService";
 const ContactModal = ({ isOpen, onClose, contact, onSave }) => {
-  const [formData, setFormData] = useState({
+const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
@@ -14,16 +14,18 @@ const ContactModal = ({ isOpen, onClose, contact, onSave }) => {
     tags: "",
     notes: ""
   });
+  const [companies, setCompanies] = useState([]);
+  const [loadingCompanies, setLoadingCompanies] = useState(false);
 
   const [errors, setErrors] = useState({});
 
-  useEffect(() => {
-if (contact) {
+useEffect(() => {
+    if (contact) {
       setFormData({
         name: contact.name_c || contact.Name || "",
         email: contact.email_c || "",
         phone: contact.phone_c || "",
-        company: contact.company_c || "",
+        company: contact.company_c?.Id || contact.company_c || "",
         tags: contact.tags_c ? contact.tags_c.split(",").join(", ") : "",
         notes: contact.notes_c || ""
       });
@@ -40,7 +42,26 @@ if (contact) {
     setErrors({});
   }, [contact, isOpen]);
 
-  const handleChange = (e) => {
+  useEffect(() => {
+    if (isOpen) {
+      loadCompanies();
+    }
+  }, [isOpen]);
+
+  const loadCompanies = async () => {
+    setLoadingCompanies(true);
+    try {
+      const companiesData = await companyService.getAll();
+      setCompanies(companiesData);
+    } catch (error) {
+      console.error("Error loading companies:", error);
+      toast.error("Failed to load companies");
+    } finally {
+      setLoadingCompanies(false);
+    }
+  };
+
+const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     if (errors[name]) {
@@ -66,7 +87,7 @@ if (contact) {
       return;
     }
 
-    const contactData = {
+const contactData = {
       ...formData,
       tags: formData.tags.split(",").map(t => t.trim()).filter(Boolean)
     };
@@ -138,12 +159,29 @@ if (contact) {
                   value={formData.phone}
                   onChange={handleChange}
                 />
-                <FormField
-                  label="Company"
-                  name="company"
-                  value={formData.company}
-                  onChange={handleChange}
-                />
+<div className="space-y-2">
+                  <label htmlFor="company" className="block text-sm font-medium text-gray-700">
+                    Company
+                  </label>
+                  <select
+                    id="company"
+                    name="company"
+                    value={formData.company}
+                    onChange={handleChange}
+                    disabled={loadingCompanies}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option value="">Select a company...</option>
+                    {companies.map((company) => (
+                      <option key={company.Id} value={company.Id}>
+                        {company.name_c || company.Name}
+                      </option>
+                    ))}
+                  </select>
+                  {loadingCompanies && (
+                    <p className="text-sm text-gray-500">Loading companies...</p>
+                  )}
+                </div>
               </div>
 
               <div className="mb-4">

@@ -16,7 +16,7 @@ async getAll() {
     try {
       const client = getApperClient();
       const params = {
-        fields: [
+fields: [
           { field: { Name: "Id" } },
           { field: { Name: "Name" } },
           { field: { Name: "name_c" } },
@@ -27,6 +27,12 @@ async getAll() {
           { field: { Name: "notes_c" } },
           { field: { Name: "sales_rep_id_c" } },
           { field: { Name: "CreatedOn" } },
+          { 
+            field: { Name: "company_c" },
+            referenceField: {
+              field: { Name: "name_c" }
+            }
+          },
           { 
             field: { Name: "sales_rep_id_c" },
             referenceField: {
@@ -58,7 +64,7 @@ async getById(id) {
     try {
       const client = getApperClient();
       const params = {
-        fields: [
+fields: [
           { field: { Name: "Id" } },
           { field: { Name: "Name" } },
           { field: { Name: "name_c" } },
@@ -69,6 +75,12 @@ async getById(id) {
           { field: { Name: "notes_c" } },
           { field: { Name: "sales_rep_id_c" } },
           { field: { Name: "CreatedOn" } },
+          { 
+            field: { Name: "company_c" },
+            referenceField: {
+              field: { Name: "name_c" }
+            }
+          },
           { 
             field: { Name: "sales_rep_id_c" },
             referenceField: {
@@ -103,7 +115,7 @@ if (!response || !response.success) {
           name_c: contactData.name || "",
           email_c: contactData.email || "",
           phone_c: contactData.phone || "",
-          company_c: contactData.company || "",
+company_c: contactData.company ? parseInt(contactData.company) : null,
           tags_c: Array.isArray(contactData.tags) ? contactData.tags.join(",") : contactData.tags || "",
           notes_c: contactData.notes || ""
         }]
@@ -142,7 +154,7 @@ console.error("Error creating contact:", error?.message || error?.response?.data
           name_c: contactData.name || "",
           email_c: contactData.email || "",
           phone_c: contactData.phone || "",
-          company_c: contactData.company || "",
+company_c: contactData.company ? parseInt(contactData.company) : null,
           tags_c: Array.isArray(contactData.tags) ? contactData.tags.join(",") : contactData.tags || "",
           notes_c: contactData.notes || ""
         }]
