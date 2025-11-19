@@ -77,30 +77,37 @@ const LeadModal = ({ isOpen, onClose, onSave, lead = null }) => {
     }
   };
 
-  const validateForm = () => {
-const newErrors = {};
+const validateForm = () => {
+    const newErrors = {};
 
-    // Required fields validation with proper null checking
-    if (!formData.lead_name_c?.trim()) {
+    // Convert values to strings and trim to handle all edge cases
+    const leadName = String(formData.lead_name_c || '').trim();
+    const email = String(formData.email_c || '').trim();
+    const phone = String(formData.phone_c || '').trim();
+    const leadSource = String(formData.lead_source_c || '').trim();
+    const assignedTo = formData.assigned_to_c;
+
+    // Required fields validation with improved string handling
+    if (!leadName || leadName.length === 0) {
       newErrors.lead_name_c = 'Lead name is required';
     }
 
-    if (!formData.email_c?.trim()) {
+    if (!email || email.length === 0) {
       newErrors.email_c = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email_c.trim())) {
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
       newErrors.email_c = 'Please enter a valid email address';
     }
 
-    if (!formData.phone_c?.trim()) {
+    if (!phone || phone.length === 0) {
       newErrors.phone_c = 'Phone is required';
     }
 
-    // For quick add, only require minimal fields
-    if (!showMore) {
-      if (!formData.lead_source_c?.trim()) {
+    // For full form, require additional fields
+    if (showMore) {
+      if (!leadSource || leadSource.length === 0) {
         newErrors.lead_source_c = 'Lead source is required';
       }
-      if (!formData.assigned_to_c) {
+      if (!assignedTo || assignedTo === '') {
         newErrors.assigned_to_c = 'Assigned to is required';
       }
     }
@@ -109,10 +116,14 @@ const newErrors = {};
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Debug logging to help identify validation issues
+    console.log('Form submission attempted with data:', formData);
+    
     if (!validateForm()) {
+      console.log('Validation failed with errors:', errors);
       return;
     }
 
@@ -128,10 +139,16 @@ const newErrors = {};
     }
   };
 
-  const handleChange = (field, value) => {
+const handleChange = (field, value) => {
+    // Ensure consistent value handling - trim whitespace for text fields
+    const processedValue = (typeof value === 'string' && 
+      ['lead_name_c', 'email_c', 'phone_c', 'lead_source_c'].includes(field)) 
+      ? value.trim() 
+      : value;
+      
     setFormData(prev => ({
       ...prev,
-      [field]: value
+      [field]: processedValue
     }));
     
     // Clear error when user starts typing
