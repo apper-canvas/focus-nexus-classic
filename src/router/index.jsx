@@ -102,12 +102,12 @@ export const router = createBrowserRouter([
             element: <Companies />,
             title: 'Companies'
           }),
-          createRoute({
-path: 'pipeline',
+createRoute({
+            path: 'pipeline',
             element: <Pipeline />,
             title: 'Pipeline'
           }),
-          ...getRouteConfig({
+          createRoute({
             path: 'leads',
             element: <Leads />,
             title: 'Leads'
