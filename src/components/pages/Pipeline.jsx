@@ -1,16 +1,18 @@
-import { useState, useEffect } from "react";
-import PipelineBoard from "@/components/organisms/PipelineBoard";
-import DealModal from "@/components/organisms/DealModal";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
-import Empty from "@/components/ui/Empty";
+import { useOutletContext } from "react-router-dom";
 import { dealService } from "@/services/api/dealService";
 import { contactService } from "@/services/api/contactService";
 import { salesRepService } from "@/services/api/salesRepService";
 import { activityService } from "@/services/api/activityService";
 import { toast } from "react-toastify";
+import React, { useEffect, useState } from "react";
+import Loading from "@/components/ui/Loading";
+import Empty from "@/components/ui/Empty";
+import Error from "@/components/ui/Error";
+import PipelineBoard from "@/components/organisms/PipelineBoard";
+import DealModal from "@/components/organisms/DealModal";
 
-const Pipeline = ({ onCreateDeal, createDealTrigger }) => {
+function Pipeline() {
+  const { onCreateDeal, createDealTrigger } = useOutletContext();
   const [deals, setDeals] = useState([]);
   const [contacts, setContacts] = useState([]);
   const [salesReps, setSalesReps] = useState([]);
@@ -143,8 +145,8 @@ await dealService.update(selectedDeal.Id, dealData);
         salesReps={salesReps}
         onSave={handleSave}
       />
-    </div>
+</div>
   );
-};
+}
 
 export default Pipeline;

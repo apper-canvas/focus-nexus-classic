@@ -1,14 +1,16 @@
-import { useState, useEffect } from "react";
-import ContactTable from "@/components/organisms/ContactTable";
-import ContactModal from "@/components/organisms/ContactModal";
-import Loading from "@/components/ui/Loading";
-import Error from "@/components/ui/Error";
-import Empty from "@/components/ui/Empty";
+import { useOutletContext } from "react-router-dom";
 import { contactService } from "@/services/api/contactService";
 import { activityService } from "@/services/api/activityService";
 import { toast } from "react-toastify";
+import React, { useEffect, useState } from "react";
+import Loading from "@/components/ui/Loading";
+import Empty from "@/components/ui/Empty";
+import Error from "@/components/ui/Error";
+import ContactModal from "@/components/organisms/ContactModal";
+import ContactTable from "@/components/organisms/ContactTable";
 
-const Contacts = ({ onCreateContact, createContactTrigger }) => {
+const Contacts = () => {
+  const { onCreateContact, createContactTrigger } = useOutletContext();
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

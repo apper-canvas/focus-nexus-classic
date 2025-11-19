@@ -1,7 +1,7 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { AuthContext } from "@/App";
+import { useAuth } from "@/layouts/Root";
 import Button from "@/components/atoms/Button";
 import SearchBar from "@/components/molecules/SearchBar";
 import ApperIcon from "@/components/ApperIcon";
@@ -9,7 +9,7 @@ const Header = ({ onCreateContact, onCreateDeal }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
-  const authContext = useContext(AuthContext);
+const { logout } = useAuth();
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -49,8 +49,8 @@ const Header = ({ onCreateContact, onCreateDeal }) => {
             </Button>
           )}
 <Button variant="secondary" onClick={() => {
-            if (authContext?.logout) {
-              authContext.logout();
+            if (logout) {
+              logout();
             }
           }}>
             <ApperIcon name="LogOut" size={16} className="mr-2" />
