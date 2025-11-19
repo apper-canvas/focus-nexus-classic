@@ -4,13 +4,14 @@ const customFunctions = {};
 /**
  * Get route configuration for a given path
  */
-export function getRouteConfig(path) {
+export async function getRouteConfig(path) {
   try {
     // Import routes.json dynamically
-    const routes = require('./routes.json');
+    const routes = await import('./routes.json');
+    const routesData = routes.default || routes;
     
     // Find matching route configuration
-    const matchingRoutes = Object.entries(routes)
+    const matchingRoutes = Object.entries(routesData)
       .filter(([pattern]) => matchesPattern(path, pattern))
       .sort(([a], [b]) => getSpecificity(b) - getSpecificity(a));
 
@@ -46,10 +47,10 @@ export function matchesPattern(path, pattern) {
     return path.startsWith(basePath);
   }
   
-  if (pattern.endsWith('/*')) {
+if (pattern.endsWith('/*')) {
     const basePath = pattern.slice(0, -2); // Remove /*
     const remainingPath = path.slice(basePath.length);
-    return path.startsWith(basePath) && !remainingPath.includes('/') || remainingPath === '';
+    return path.startsWith(basePath) && (!remainingPath.includes('/') || remainingPath === '');
   }
   
   return false;
