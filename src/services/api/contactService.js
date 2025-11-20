@@ -26,7 +26,11 @@ export const contactService = {
           { field: { Name: "CreatedOn" } }
         ]
       };
-
+const { ApperClient } = window.ApperSDK;
+      const client = new ApperClient({
+        apperProjectId: import.meta.env.VITE_APPER_PROJECT_ID,
+        apperPublicKey: import.meta.env.VITE_APPER_PUBLIC_KEY
+      });
       const response = await client.fetchRecords("contact_c", params);
 
       if (!response.success) {
