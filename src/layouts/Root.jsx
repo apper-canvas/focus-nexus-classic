@@ -140,7 +140,6 @@ const Root = () => {
   return (
     <AuthContext.Provider value={{ logout, isInitialized, user }}>
       <Outlet />
-      <div id="authentication" style={{ display: 'none' }} />
     </AuthContext.Provider>
   );
 };
