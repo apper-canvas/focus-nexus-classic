@@ -15,7 +15,7 @@ export const companyService = {
   async getAll() {
     try {
       const client = getApperClient();
-      const params = {
+const params = {
         fields: [
           { field: { Name: "Id" } },
           { field: { Name: "Name" } },
@@ -62,7 +62,7 @@ export const companyService = {
   async getById(id) {
     try {
       const client = getApperClient();
-      const params = {
+const params = {
         fields: [
           { field: { Name: "Id" } },
           { field: { Name: "Name" } },
@@ -105,7 +105,7 @@ export const companyService = {
     }
   },
 
-  async create(companyData) {
+async create(companyData) {
     try {
       const client = getApperClient();
       const params = {
@@ -121,7 +121,7 @@ export const companyService = {
           notes_c: companyData.notes || "",
           num_employees_c: companyData.numEmployees || null,
           annual_revenue_c: companyData.annualRevenue || null,
-          parent_company_id_c: companyData.parentCompanyId || null
+          parent_company_id_c: companyData.parentCompanyId ? parseInt(companyData.parentCompanyId) : null
         }]
       };
       
@@ -152,7 +152,7 @@ export const companyService = {
   async update(id, companyData) {
     try {
       const client = getApperClient();
-      const params = {
+const params = {
         records: [{
           Id: parseInt(id),
           name_c: companyData.name || "",
@@ -166,7 +166,7 @@ export const companyService = {
           notes_c: companyData.notes || "",
           num_employees_c: companyData.numEmployees || null,
           annual_revenue_c: companyData.annualRevenue || null,
-          parent_company_id_c: companyData.parentCompanyId || null
+          parent_company_id_c: companyData.parentCompanyId ? parseInt(companyData.parentCompanyId) : null
         }]
       };
       

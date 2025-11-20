@@ -24,8 +24,8 @@ useEffect(() => {
       setFormData({
         name: contact.name_c || contact.Name || "",
         email: contact.email_c || "",
-        phone: contact.phone_c || "",
-        company: contact.company_c?.Id || contact.company_c || "",
+phone: contact.phone_c || "",
+        company: contact.company_c?.Id || (typeof contact.company_c === 'string' ? contact.company_c : "") || "",
         tags: contact.tags_c ? contact.tags_c.split(",").join(", ") : "",
         notes: contact.notes_c || ""
       });

@@ -81,8 +81,8 @@ const ContactTable = ({ contacts, onEdit, onDelete }) => {
                     <span className="text-sm font-medium text-slate-800">{contact.name_c || contact.Name || "Unknown"}</span>
                   </div>
                 </td>
-                <td className="px-6 py-4">
-<span className="text-sm text-slate-600">{contact.company_c || "No Company"}</span>
+<td className="px-6 py-4">
+                  <span className="text-sm text-slate-600">{contact.company_c?.name_c || contact.company_c?.Name || "No Company"}</span>
                 </td>
                 <td className="px-6 py-4">
 <span className="text-sm text-slate-600">{contact.email_c || "No Email"}</span>
