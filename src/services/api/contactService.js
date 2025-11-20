@@ -22,9 +22,9 @@ export const contactService = {
           { field: { Name: "tags_c" } },
           { field: { Name: "notes_c" } },
           { field: { Name: "created_at_c" } },
-          { field: { Name: "updated_at_c" } },
+{ field: { Name: "updated_at_c" } },
           { field: { Name: "CreatedOn" } }
-]
+        ]
       };
 
       const response = await client.fetchRecords("contact_c", params);
